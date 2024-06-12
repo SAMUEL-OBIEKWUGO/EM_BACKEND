@@ -5,6 +5,7 @@ const port = 5320 || process.env.PORT;
 const connect = require('./config/DB');
 const authRoute = require('./routes/authRoutes');
 const userRoute = require("./routes/userRoute");
+const postRoute = require("./routes/postRoute");
 const cors = require("cors");
 const cloudinary = require('cloudinary').v2;
 const fileUpload = require("express-fileupload");
@@ -20,6 +21,7 @@ app.use(cors());
 // API's 
 app.use('/api/v1/auth',authRoute);
 app.use('/api/v1/users',userRoute);
+app.use('/api/v1/post',postRoute);
 
 // Cloudinary 20-05-2024
 cloudinary.config({

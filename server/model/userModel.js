@@ -71,7 +71,7 @@ const userSchema = new Schema(
     followers: [{ type: mongoose.Schema.ObjectId, ref: "User" }],
     following: [{ type: mongoose.Schema.ObjectId, ref: "User" }],
     resetPasswordToken: String,
-    resetPasswordExpire: String,
+    resetPasswordExpire: Date,
   },
   { timestamps: true }
 );
@@ -96,9 +96,20 @@ userSchema.methods.comparePassword = async function (userPassword) {
 userSchema.methods.generateToken = async function (params) {
   let token = jwt.sign(
     { userId: this._id, userName: this.userName },
-    process.env.JWT_SECRET
+    process.env.JWT_SECRET 
   );
   return token;
+};
+
+// generating reset password token
+userSchema.methods.getResetPasswordToken = function () {
+  const resetToken = crypto.randomBytes(20).toString("hex");
+  this.resetPasswordToken = crypto
+    .createHash("sha256")
+    .update(resetToken)
+    .digest("hex");
+  this.resetPasswordExpire = Date.now() + 10 * (60 * 1000);
+  return resetToken;
 };
 
 const USER = mongoose.model("User", userSchema);

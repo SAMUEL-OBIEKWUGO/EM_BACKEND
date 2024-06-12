@@ -1,5 +1,5 @@
 const express = require('express');
-const {registration,login, getUserName, isLoggedIn } = require("../controllers/authController");
+const {registration,login, getUserName, isLoggedIn, forgotPassword, resetPassword } = require("../controllers/authController");
 const router = express.Router();
 const authMiddleware = require('../middleware/auth')
 
@@ -15,5 +15,10 @@ router.get('/getusername',authMiddleware,getUserName);
 
 // isLoggedIn
 router.get('/isloggedin',isLoggedIn)
+
+// forgot password
+router.post('/forgotpassword',forgotPassword); 
+// reset passsword ftn
+router.put('/resetpassword/:resetToken',resetPassword)
 
 module.exports = router;
